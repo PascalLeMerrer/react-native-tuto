@@ -3,6 +3,7 @@ import { CardItem, List, ListItem, Spinner, Text, Thumbnail } from 'native-base'
 var superagent = require('superagent');
 
 export default class AlbumList extends Component {
+
     constructor(props) {
       super(props);
       this.state = {
@@ -16,29 +17,27 @@ export default class AlbumList extends Component {
     }
 
     load() {
+
       // show the Spinner during API request execution
       this.setState({
           loading: true
       });
-
-      var self = this;
-      return fetch('http://api.deezer.com/artist/27/albums')
-          .then((response) => response.json())
-          .then((responseJson) => {
-              // remove the spinner and display the list of albums
-              self.setState({
+      superagent.get('http://api.deezer.com/artist/27/albums')
+        .set('Content-Type', 'application/json; charset=UTF-8')
+        .set('Accept', 'application/json')
+        .end((err, response) => {
+            if (response.ok) {
+              this.setState({
                   loading: false,
-                  albums: responseJson.data
+                  albums: response.body.data
               });
-              console.log("Deezer response received")
-          })
-          .catch((error) => {
-              self.setState({
+            }
+            else {
+              this.setState({
                   loading: false
               });
-
-              console.error(error);
-          });
+            }
+        })
     }
 
     render() {
