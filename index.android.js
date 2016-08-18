@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
-import { AppRegistry } from 'react-native';
-import { Button, Content, Container, Footer, Header, Icon, Title } from 'native-base';
+import { AppRegistry, Navigator } from 'react-native';
 
 import AlbumList from './albumlist';
 
 class AwesomeNativeBase extends Component {
 
+    renderScene(route, navigator) {
+      return(
+        <AlbumList title={ route.title } artistId={ route.artistId } />
+      )
+    }
+
     render() {
-        return (
-            <Container>
-                <Header>
-                   <Title>Albums</Title>
-                </Header>
-                <Content>
-                  <AlbumList />
-                </Content>
-            </Container>
-        );
+      return (
+        <Navigator
+          initialRoute={{ title: 'Album List for Daft Punk', artistId:27 }}
+          renderScene={ this.renderScene }
+        />
+      );
     }
 }
 

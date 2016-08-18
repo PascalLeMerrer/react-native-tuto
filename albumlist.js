@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { CardItem, List, ListItem, Spinner, Text, Thumbnail } from 'native-base';
+import { Content, Container, Header, List, ListItem, Spinner, Text, Thumbnail, Title } from 'native-base';
 var superagent = require('superagent');
 
 export default class AlbumList extends Component {
@@ -22,8 +22,7 @@ export default class AlbumList extends Component {
       this.setState({
           loading: true
       });
-      superagent.get('http://api.deezer.com/artist/27/albums')
-        .set('Content-Type', 'application/json; charset=UTF-8')
+      superagent.get('http://api.deezer.com/artist/' + this.props.artistId + '/albums')
         .set('Accept', 'application/json')
         .end((err, response) => {
             if (response.ok) {
@@ -43,19 +42,28 @@ export default class AlbumList extends Component {
     render() {
         if(this.state.loading) {
           return (
-            <Spinner color="#440099"/>
+            <Container>
+              <Spinner color="#440099"/>
+            </Container>
           );
         }
         else {
           return(
-            <List dataArray={this.state.albums}
-                  renderRow={(item) =>
-                      <ListItem>
-                          <Thumbnail square size={60} source={{uri: item.cover_small}} />
-                          <Text>{item.title}</Text>
-                      </ListItem>
-                  }>
-            </List>
+            <Container>
+                <Header>
+                   <Title>{this.props.title}</Title>
+                </Header>
+                <Content>
+                  <List dataArray={this.state.albums}
+                        renderRow={(item) =>
+                            <ListItem>
+                                <Thumbnail square size={60} source={{uri: item.cover_small}} />
+                                <Text>{item.title}</Text>
+                            </ListItem>
+                        }>
+                  </List>
+                </Content>
+            </Container>
           );
         }
     }
