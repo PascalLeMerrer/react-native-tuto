@@ -3,36 +3,29 @@ import { AppRegistry, Navigator } from 'react-native';
 
 import AlbumList from './albumlist';
 import TrackList from './tracklist';
+import Search from './search';
 
 class AwesomeNativeBase extends Component {
 
-    renderScene(route, navigator) {
-      if (route.scene == 1) {
-        return(
-          <TrackList title={ route.title } albumId={ route.albumId } navigator={ navigator }/>
-        )
-      }
-      else {
-        return(
-          <AlbumList title={ route.title } artistId={ route.artistId } navigator={ navigator } />
-        )
-      }
-    }
 
-    render() {
+      return false;
+    });
+  }
+  renderScene(route, navigator) {
+    var scenes = [
+      <AlbumList title={ route.title } artistId={ route.artistId } navigator={ navigator } />,
+      <TrackList title={ route.title } albumId={ route.albumId } navigator={ navigator } />,
+      <Search navigator={ navigator } />
+    ]
+    return(scenes[route.scene]);
+  }
 
-      const routes = [ { scene: 0,
-                         title: 'Album List for Daft Punk',
-                         artistId: 27
-                       }
-                      ];
-      return (
-        <Navigator
-          initialRoute={ routes[0] }
-          renderScene={ this.renderScene }
-        />
-      );
-    }
+  render() {
+    return (<Navigator
+        initialRoute={ { scene: 0 } }
+        renderScene={ this.renderScene }
+      />);
+  }
 }
 
 AppRegistry.registerComponent('AwesomeNativeBase', () => AwesomeNativeBase);

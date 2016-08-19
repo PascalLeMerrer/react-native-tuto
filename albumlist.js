@@ -1,5 +1,16 @@
 import React, { Component } from 'react';
-import { Content, Container, Header, List, ListItem, Spinner, Text, Thumbnail, Title } from 'native-base';
+import { Button,
+         Content,
+         Container,
+         Header,
+         Icon,
+         List,
+         ListItem,
+         Spinner,
+         Text,
+         Thumbnail,
+         Title
+       } from 'native-base';
 var superagent = require('superagent');
 
 export default class AlbumList extends Component {
@@ -41,12 +52,20 @@ export default class AlbumList extends Component {
 
     // display the track list scene for the given album
     displayTracks(album) {
-        var route = {
-                      albumId: album.id,
-                      title: album.title,
-                      scene: 1
-                    }
-        this.props.navigator.push(route);
+      var route = {
+                    albumId: album.id,
+                    title: album.title,
+                    scene: 1
+                  }
+      this.props.navigator.push(route);
+    }
+
+    // display the search scene
+    displaySearch() {
+      var route = {
+                    scene: 2
+                  }
+      this.props.navigator.push(route);
     }
 
     render() {
@@ -61,7 +80,13 @@ export default class AlbumList extends Component {
           return(
             <Container>
                 <Header>
+                   <Button transparent>
+                      <Icon name="md-disc" />
+                  </Button>
                    <Title>{this.props.title}</Title>
+                   <Button transparent onPress={()=>this.displaySearch()}>
+                      <Icon name="md-search" />
+                   </Button>
                 </Header>
                 <Content>
                   <List dataArray={this.state.albums}
