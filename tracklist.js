@@ -1,34 +1,34 @@
 import React, { Component } from 'react';
-import { Content, Container, Header, List, ListItem, Spinner, Text, Thumbnail, Title } from 'native-base';
+import { InteractionManager } from 'react-native'
+import { Button, Content, Container, Header, List, ListItem, Icon, Spinner, Text, Title } from 'native-base';
 var superagent = require('superagent');
 
-export default class AlbumList extends Component {
+export default class TrackList extends Component {
 
     constructor(props) {
       super(props);
+      console.log('track list created')
       this.state = {
-          loading: false,
-          albums: null
+          loading: true,
+          tracks: null
       }
     }
 
     componentDidMount() {
-      this.load();
+      // delay the loading after the end of the transition
+      InteractionManager.runAfterInteractions(() => {
+        this.load();
+      });
     }
 
     load() {
-
-      // show the Spinner during API request execution
-      this.setState({
-          loading: true
-      });
-      superagent.get('http://api.deezer.com/artist/' + this.props.artistId + '/albums')
+      superagent.get('http://api.deezer.com/album/' + this.props.albumId + '/tracks')
         .set('Accept', 'application/json')
         .end((err, response) => {
             if (response.ok) {
               this.setState({
                   loading: false,
-                  albums: response.body.data
+                  tracks: response.body.data
               });
             }
             else {
@@ -39,20 +39,20 @@ export default class AlbumList extends Component {
         })
     }
 
-    // display the track list scene for the given album
-    displayTracks(album) {
-        var route = {
-                      albumId: album.id,
-                      title: album.title,
-                      scene: 1
-                    }
-        this.props.navigator.push(route);
+    back() {
+      this.props.navigator.pop();
     }
 
     render() {
         if(this.state.loading) {
           return (
             <Container>
+                <Header>
+                   <Button info>
+                    <Icon name="md-arrow-back"/>
+                   </Button>
+                   <Title>{this.props.title}</Title>
+                </Header>
               <Spinner color="#440099"/>
             </Container>
           );
@@ -61,13 +61,15 @@ export default class AlbumList extends Component {
           return(
             <Container>
                 <Header>
+                   <Button info onPress={()=>this.back()}>
+                    <Icon name="md-arrow-back" />
+                   </Button>
                    <Title>{this.props.title}</Title>
                 </Header>
                 <Content>
-                  <List dataArray={this.state.albums}
+                  <List dataArray={this.state.tracks}
                         renderRow={(item) =>
-                            <ListItem button onPress={()=>this.displayTracks(item)}>
-                                <Thumbnail square size={60} source={{uri: item.cover_small}} />
+                            <ListItem>
                                 <Text>{item.title}</Text>
                             </ListItem>
                         }>
