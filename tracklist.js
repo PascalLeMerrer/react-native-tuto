@@ -47,7 +47,7 @@ export default class TrackList extends Component {
           return (
             <Container>
                 <Header>
-                   <Button info>
+                   <Button transparent>
                     <Icon name="md-arrow-back"/>
                    </Button>
                    <Title>{this.props.title}</Title>
@@ -60,7 +60,7 @@ export default class TrackList extends Component {
           return(
             <Container>
                 <Header>
-                   <Button info onPress={()=>this.back()}>
+                   <Button transparent onPress={()=>this.back()}>
                     <Icon name="md-arrow-back" />
                    </Button>
                    <Title>{this.props.title}</Title>
