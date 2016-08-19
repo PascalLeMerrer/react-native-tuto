@@ -7,7 +7,6 @@ export default class TrackList extends Component {
 
     constructor(props) {
       super(props);
-      console.log('track list created')
       this.state = {
           loading: true,
           tracks: null
